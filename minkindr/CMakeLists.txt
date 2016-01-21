@@ -13,19 +13,37 @@ catkin_add_gtest(${PROJECT_NAME}_tests
   test/test-transformation.cc
 )
 
-# Add all files to show up in QtCreator.
-add_custom_target(${PROJECT_NAME} SOURCES
-  include/kindr/minimal/angle-axis.h
-  include/kindr/minimal/common.h
-  include/kindr/minimal/position.h
-  include/kindr/minimal/quat-transformation.h
-  include/kindr/minimal/rotation-quaternion.h
-  include/kindr/minimal/implementation/angle-axis-inl.h
-  include/kindr/minimal/implementation/quat-transformation-inl.h
-  include/kindr/minimal/implementation/rotation-quaternion-inl.h
+set(INC_DIR ./include/kindr/minimal)
+set(PUBLIC_HEADERS
+  ${INC_DIR}/angle-axis.h
+  ${INC_DIR}/common.h
+  ${INC_DIR}/position.h
+  ${INC_DIR}/quat-transformation.h
+  ${INC_DIR}/rotation-quaternion.h
 )
 
+set(IMPL_HEADERS
+  ${INC_DIR}/implementation/angle-axis-inl.h
+  ${INC_DIR}/implementation/quat-transformation-inl.h
+  ${INC_DIR}/implementation/rotation-quaternion-inl.h
+)
+
+## INSTALLATION
+INSTALL(
+  FILES ${PUBLIC_HEADERS}
+  DESTINATION ${INC_DIR}
+  )
+
+INSTALL(
+  FILES ${IMPL_HEADERS}
+  DESTINATION ${INC_DIR}/implementation
+  )
+
+## TESTS
 target_link_libraries(${PROJECT_NAME}_tests ${catkin_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+
+# Add all files to show up in QtCreator.
+add_custom_target(${PROJECT_NAME} SOURCES ${PUBLIC_HEADERS})
 
 cs_install()
 cs_export()
